@@ -1,0 +1,6 @@
+interface:
+  display_name: "Journal Style Corpus"
+  short_description: "Build reusable journal writing style guides"
+  default_prompt: "Use $journal-style-corpus to turn my journal PDFs into a validated writing-style corpus and guide."
+policy:
+  allow_implicit_invocation: true
