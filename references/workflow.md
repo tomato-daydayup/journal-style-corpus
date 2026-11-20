@@ -10,6 +10,8 @@
 6. Stability analysis
 7. Style-guide construction
 8. Holdout validation
+9. Manuscript application
+10. Large-corpus incremental operation
 
 ## 1. Project layout
 
@@ -24,6 +26,10 @@ corpus-root/
 |   `-- extraction_report.csv
 |-- 03_sections/             One folder per target module
 |-- 04_style_analysis/       Codebook, coding CSVs, statistics, guide
+|   |-- batches/             One coding CSV per incremental batch
+|   |-- cumulative/          Deterministically merged coding and statistics
+|   `-- guide_versions/      Frozen guides and delta packets
+|-- 05_manuscript_revision/  Profiles, diagnoses, revisions, logs, audits
 |-- scripts/                 Corpus-specific reproducible scripts
 `-- tmp/pdfs/                Disposable extraction/render intermediates
 ```
@@ -35,6 +41,8 @@ Use the target field's own section names. Examples include Introduction/Theory/M
 ### Inclusion criteria
 
 Define journal, time window, article type, empirical/theoretical status, language, and accessibility. Exclude documents whose genre would distort the target unless the user wants a mixed-genre guide.
+
+Before filtering by genre, normalize publisher-page metadata. Access markers such as `Open access` and date labels such as `Published: <date>` do not themselves name a genre. If no explicit genre is present, map them (and a blank type) to the publisher's default `Article`, while retaining access and publication-date values in separate fields. Preserve every explicit genre label and document any journal-specific exception to this fallback.
 
 ### Strata
 
@@ -198,3 +206,13 @@ Freeze and version the guide. Extract/code holdout using the existing codebook. 
 - drafting/revision performance if Codex-generated text is tested.
 
 Classify failures as extraction error, coding error, style-rule error, method/genre variant, or insufficient factual input. Preserve the original guide before any post-holdout revision.
+
+## 9. Manuscript application
+
+Once a guide version is frozen, use it as the sole corpus-derived input to manuscript revision. Do not reopen individual corpus papers while rewriting. This preserves provenance, keeps context bounded, and reduces copying risk.
+
+Read [manuscript-revision.md](manuscript-revision.md) for the required intake, diagnosis, rule-priority, section revision, logging, and final preservation-audit workflow. Keep revision artifacts in a separate directory and leave the author's source file untouched unless replacement is explicitly requested.
+
+## 10. Large-corpus incremental operation
+
+For large or growing corpora, read [large-corpus.md](large-corpus.md). Process new prose once, persist its paragraph coding, and update cumulative statistics from structured files. Guide updates should consume the frozen codebook, current guide, cumulative statistics, previous statistics, and the new-batch QA summary—not all historical article text.

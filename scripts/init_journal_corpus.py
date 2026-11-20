@@ -12,6 +12,8 @@ from pathlib import Path
 REGISTRY_FIELDS = [
     "citation_key", "title", "journal", "year", "pdf_file", "article_type",
     "method_family", "method_group", "dataset_split", "status", "notes",
+    "incremental_phase", "batch_id", "batch_order", "codebook_version",
+    "coding_status",
 ]
 
 
@@ -28,6 +30,10 @@ def main() -> None:
         root / "01_registry",
         root / "02_extracted" / "full_text",
         root / "04_style_analysis",
+        root / "04_style_analysis" / "batches",
+        root / "04_style_analysis" / "cumulative",
+        root / "04_style_analysis" / "guide_versions",
+        root / "05_manuscript_revision",
         root / "scripts",
         root / "tmp" / "pdfs",
         *[root / "03_sections" / module for module in args.modules],

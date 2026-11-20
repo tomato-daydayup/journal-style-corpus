@@ -17,6 +17,14 @@ Recommended values:
 
 Citation keys must be unique. `pdf_file` should be a basename, not an unstable absolute path.
 
+For incremental projects, add:
+
+```text
+incremental_phase,batch_id,batch_order,codebook_version,coding_status
+```
+
+Keep `dataset_split` authoritative. Pilot, calibration, and scale batches are all development; holdout is never assigned a development batch.
+
 ## Section frontmatter
 
 ```yaml
@@ -55,7 +63,8 @@ Recommended columns:
 citation_key,cohort,module,paragraph_id,paragraph_position,
 primary_move,primary_move_label,secondary_moves,transition_marker,
 citation_role,tense_voice,sentence_count,research_link,
-representative_excerpt,extraction_quality,quality_note,review_status
+representative_excerpt,extraction_quality,quality_note,review_status,
+codebook_version,batch_id
 ```
 
 Rules:
@@ -65,6 +74,16 @@ Rules:
 - `research_link` may reference hypotheses, propositions, research questions, models, tables, or figures;
 - `extraction_quality`: `clean` or `review`;
 - do not put excluded tables/formulas in the coding file.
+- `codebook_version` and `batch_id` are required in cumulative large-corpus coding, although the merge tool may add them from command arguments to a new batch file.
+
+## Incremental batch plan
+
+```text
+citation_key,dataset_split,incremental_phase,batch_id,batch_order,
+stratum,codebook_version,coding_status
+```
+
+Recommended `incremental_phase` values: `pilot`, `calibration`, `scale`, and `holdout`. Recommended `coding_status`: `planned`, `in_progress`, `coded`, `qa_complete`, or `excluded`.
 
 ## Excluded-noise log
 
@@ -103,3 +122,52 @@ extraction_version,holdout_opened,notes
 ```
 
 Once holdout is opened, do not overwrite the frozen development guide.
+
+## Manuscript revision profile
+
+Recommended YAML:
+
+```yaml
+manuscript_id: example_manuscript
+writing_destination: "Target journal or field"
+guide_version: v1.0-validated
+guide_status: validated
+article_type: empirical_article
+method_family: difference_in_differences
+sections_in_scope: [introduction, theory, method, results, discussion]
+source_file: manuscript.md
+author_constraints: []
+hard_preserve:
+  - claims_and_calibrated_certainty
+  - citations_and_claim_links
+  - equations_and_notation
+  - numerical_results
+  - hypotheses_and_labels
+  - table_and_figure_references
+```
+
+## Section diagnosis
+
+```text
+paragraph_id,current_function,target_move,status,issue,
+recommended_action,rule_id,evidence_tier,author_query
+```
+
+Use `status` values such as `aligned`, `missing`, `duplicated`, `misordered`, `unclear`, or `substantive_gap`. A substantive gap requires an author query, not generated content.
+
+## Revision log
+
+```text
+change_id,section,paragraph_id,change_type,summary,rule_id,
+priority,evidence_tier,preserved_elements,conflict,author_query
+```
+
+Material changes should link to a guide rule. Pure copyediting may use `editorial_cleanup` as the rule ID but must not change claims.
+
+## Preservation audit
+
+```text
+check,status,evidence,notes
+```
+
+Required checks: numerical results, citations, equations/notation, labels, terminology, causal strength, limitations, cross-references, method-result alignment, and unresolved author queries.
